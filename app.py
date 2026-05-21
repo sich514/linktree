@@ -1,5 +1,6 @@
 from flask import Flask, redirect, render_template
-import sqlite3
+import json
+import os
 
 app = Flask(__name__)
 
@@ -10,25 +11,29 @@ LINKS = {
     "reviews": "https://instagram.com/yourinstagram"
 }
 
-def init_db():
-    conn = sqlite3.connect('clicks.db')
-    c = conn.cursor()
+DATA_FILE = "clicks.json"
 
-    c.execute('''
-    CREATE TABLE IF NOT EXISTS clicks (
-        name TEXT PRIMARY KEY,
-        count INTEGER
-    )
-    ''')
+def load_data():
 
-    for link in LINKS:
-        c.execute(
-            "INSERT OR IGNORE INTO clicks VALUES (?, ?)",
-            (link, 0)
-        )
+    if not os.path.exists(DATA_FILE):
 
-    conn.commit()
-    conn.close()
+        data = {
+            "website": 0,
+            "whatsapp": 0,
+            "zagatclub": 0,
+            "reviews": 0
+        }
+
+        with open(DATA_FILE, "w") as f:
+            json.dump(data, f)
+
+    with open(DATA_FILE, "r") as f:
+        return json.load(f)
+
+def save_data(data):
+
+    with open(DATA_FILE, "w") as f:
+        json.dump(data, f)
 
 @app.route('/')
 
@@ -42,16 +47,11 @@ def go(name):
     if name not in LINKS:
         return "404"
 
-    conn = sqlite3.connect('clicks.db')
-    c = conn.cursor()
+    data = load_data()
 
-    c.execute(
-        "UPDATE clicks SET count = count + 1 WHERE name=?",
-        (name,)
-    )
+    data[name] += 1
 
-    conn.commit()
-    conn.close()
+    save_data(data)
 
     return redirect(LINKS[name])
 
@@ -59,14 +59,7 @@ def go(name):
 
 def analytics():
 
-    conn = sqlite3.connect('clicks.db')
-    c = conn.cursor()
-
-    c.execute("SELECT * FROM clicks")
-
-    data = c.fetchall()
-
-    conn.close()
+    data = load_data()
 
     return render_template(
         'analytics.html',
@@ -74,5 +67,4 @@ def analytics():
     )
 
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)
