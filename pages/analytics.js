@@ -1,181 +1,184 @@
 // pages/analytics.js
-import { useEffect, useState } from 'react';
+import Head from "next/head";
+import { useEffect, useState } from "react";
 
 const LABELS = {
-  website:   { icon: '🌐', label: 'Website' },
-  whatsapp:  { icon: '💬', label: 'WhatsApp' },
-  zagatclub: { icon: '🚀', label: 'Zagat Club' },
-  reviews:   { icon: '⭐', label: 'Reviews' },
+  website:   { icon: "🌐", label: "Website" },
+  whatsapp:  { icon: "💬", label: "WhatsApp" },
+  zagatclub: { icon: "🚀", label: "Zagat Club" },
+  reviews:   { icon: "⭐", label: "Reviews" },
 };
 
 export default function Analytics() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch('/api/analytics')
-      .then(r => r.json())
-      .then(setData)
-      .catch(() => setError('Failed to load analytics'));
-  }, []);
+  const load = () => {
+    setLoading(true);
+    setError(null);
+    fetch("/api/analytics")
+      .then((r) => r.json())
+      .then((d) => { setData(d); setLoading(false); })
+      .catch(() => { setError("Failed to load"); setLoading(false); });
+  };
+
+  useEffect(load, []);
 
   const total = data ? Object.values(data).reduce((a, b) => a + b, 0) : 0;
 
   return (
     <>
+      <Head>
+        <title>Analytics — Zagat Boutique</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="robots" content="noindex" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+
       <div className="page">
-        <div className="header">
-          <a href="/" className="back">← Back</a>
-          <h1>Analytics</h1>
-          <p className="subtitle">Link click statistics</p>
-        </div>
+        <div className="glow glow-1" />
+        <div className="glow glow-2" />
 
-        {error && <div className="error">{error}</div>}
+        <div className="wrap">
+          <header className="header">
+            <a href="/" className="back">← Back</a>
+            <h1>Analytics</h1>
+            <p className="sub">Link click statistics</p>
+          </header>
 
-        {!data && !error && (
-          <div className="loading">Loading...</div>
-        )}
+          {error && <div className="msg error">{error}</div>}
+          {loading && !error && <div className="msg">Loading…</div>}
 
-        {data && (
-          <>
-            <div className="total-card">
-              <div className="total-number">{total}</div>
-              <div className="total-label">Total Clicks</div>
-            </div>
+          {data && !loading && (
+            <>
+              <div className="total">
+                <span className="total-num">{total}</span>
+                <span className="total-lbl">Total Clicks</span>
+              </div>
 
-            <div className="cards">
-              {Object.entries(LABELS).map(([key, { icon, label }]) => {
-                const count = data[key] || 0;
-                const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-                return (
-                  <div className="card" key={key}>
-                    <div className="card-top">
-                      <div className="card-icon">{icon}</div>
-                      <div className="card-info">
-                        <div className="card-label">{label}</div>
-                        <div className="card-count">{count} clicks</div>
+              <div className="items">
+                {Object.entries(LABELS).map(([key, { icon, label }]) => {
+                  const count = data[key] || 0;
+                  const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+                  return (
+                    <div className="item" key={key}>
+                      <div className="item-top">
+                        <span className="item-icon">{icon}</span>
+                        <span className="item-info">
+                          <span className="item-label">{label}</span>
+                          <span className="item-count">{count} clicks</span>
+                        </span>
+                        <span className="item-pct">{pct}%</span>
                       </div>
-                      <div className="card-pct">{pct}%</div>
+                      <div className="bar">
+                        <div className="bar-fill" style={{ width: `${pct}%` }} />
+                      </div>
                     </div>
-                    <div className="bar-bg">
-                      <div className="bar-fill" style={{ width: `${pct}%` }} />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
 
-            <button className="refresh" onClick={() => {
-              setData(null);
-              fetch('/api/analytics').then(r => r.json()).then(setData);
-            }}>
-              ↻ Refresh
-            </button>
-          </>
-        )}
+              <button className="refresh" onClick={load}>↻ Refresh</button>
+            </>
+          )}
+        </div>
       </div>
 
       <style jsx global>{`
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
         body {
-          font-family: Arial, sans-serif;
-          min-height: 100vh;
-          background:
-            radial-gradient(circle at top left, #145c46 0%, transparent 30%),
-            radial-gradient(circle at bottom right, #07241d 0%, transparent 35%),
-            linear-gradient(135deg, #02100c 0%, #052018 30%, #0b3b2d 60%, #02100c 100%);
-          color: white;
-          padding: 40px 20px;
+          font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+          min-height: 100vh; min-height: 100dvh;
+          background: #060f0b;
+          color: #f0f0f0;
+          overflow-x: hidden;
         }
       `}</style>
 
       <style jsx>{`
-        .page { max-width: 500px; margin: 0 auto; }
+        .page {
+          position: relative;
+          min-height: 100vh; min-height: 100dvh;
+          display: flex; justify-content: center;
+          padding: 40px 16px;
+        }
+        .glow { position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; }
+        .glow-1 { width: 500px; height: 500px; top: -120px; left: -100px; background: radial-gradient(circle, rgba(20,92,70,0.35), transparent 70%); }
+        .glow-2 { width: 400px; height: 400px; bottom: -80px; right: -80px; background: radial-gradient(circle, rgba(88,189,148,0.15), transparent 70%); }
 
-        .header { margin-bottom: 30px; }
+        .wrap { position: relative; z-index: 1; width: 100%; max-width: 440px; }
+
+        .header { margin-bottom: 28px; }
         .back {
-          color: #58bd94;
-          text-decoration: none;
-          font-size: 14px;
-          display: inline-block;
-          margin-bottom: 12px;
+          display: inline-block; margin-bottom: 14px;
+          color: #58bd94; text-decoration: none; font-size: 13px;
+          transition: opacity 0.2s;
         }
-        h1 { font-size: 28px; margin-bottom: 6px; }
-        .subtitle { color: #9f9f9f; font-size: 14px; }
+        .back:hover { opacity: 0.7; }
+        h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 600; margin-bottom: 4px; }
+        .sub { font-size: 13px; color: rgba(255,255,255,0.4); }
 
-        .total-card {
-          background: rgba(88,189,148,0.12);
-          border: 1px solid rgba(88,189,148,0.2);
-          border-radius: 20px;
-          padding: 24px;
-          text-align: center;
-          margin-bottom: 20px;
+        .total {
+          display: flex; flex-direction: column; align-items: center;
+          background: rgba(88,189,148,0.08);
+          border: 1px solid rgba(88,189,148,0.15);
+          border-radius: 20px; padding: 24px; margin-bottom: 20px;
         }
-        .total-number { font-size: 48px; font-weight: bold; color: #58bd94; }
-        .total-label { color: #9f9f9f; margin-top: 4px; }
+        .total-num { font-size: 44px; font-weight: 600; color: #58bd94; line-height: 1; }
+        .total-lbl { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 6px; }
 
-        .cards { display: flex; flex-direction: column; gap: 12px; }
+        .items { display: flex; flex-direction: column; gap: 10px; }
 
-        .card {
-          background: rgba(255,255,255,0.05);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 18px;
-          padding: 18px;
+        .item {
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.06);
+          border-radius: 16px; padding: 16px;
         }
-        .card-top {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          margin-bottom: 12px;
-        }
-        .card-icon {
-          width: 44px; height: 44px;
+        .item-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .item-icon {
+          width: 40px; height: 40px; border-radius: 10px;
           background: rgba(255,255,255,0.06);
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 20px;
-          flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 18px; flex-shrink: 0;
         }
-        .card-info { flex: 1; }
-        .card-label { font-size: 15px; font-weight: 500; }
-        .card-count { font-size: 13px; color: #9f9f9f; margin-top: 2px; }
-        .card-pct { font-size: 18px; font-weight: bold; color: #58bd94; }
+        .item-info { flex: 1; }
+        .item-label { display: block; font-weight: 500; font-size: 14px; }
+        .item-count { display: block; font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+        .item-pct { font-size: 16px; font-weight: 600; color: #58bd94; }
 
-        .bar-bg {
-          height: 6px;
-          background: rgba(255,255,255,0.08);
-          border-radius: 3px;
-          overflow: hidden;
-        }
+        .bar { height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
         .bar-fill {
-          height: 100%;
+          height: 100%; border-radius: 3px;
           background: linear-gradient(90deg, #145c46, #58bd94);
-          border-radius: 3px;
           transition: width 0.6s ease;
         }
 
         .refresh {
-          display: block;
-          margin: 24px auto 0;
-          background: rgba(255,255,255,0.06);
-          color: white;
-          border: 1px solid rgba(255,255,255,0.12);
-          padding: 12px 28px;
-          border-radius: 12px;
-          cursor: pointer;
-          font-size: 14px;
+          display: block; margin: 24px auto 0;
+          background: rgba(255,255,255,0.05);
+          color: #f0f0f0;
+          border: 1px solid rgba(255,255,255,0.1);
+          padding: 10px 24px; border-radius: 12px;
+          cursor: pointer; font-size: 13px; font-family: inherit;
           transition: background 0.2s;
         }
-        .refresh:hover { background: rgba(255,255,255,0.1); }
+        .refresh:hover { background: rgba(255,255,255,0.09); }
 
-        .loading, .error {
-          text-align: center;
-          padding: 40px;
-          color: #9f9f9f;
-        }
+        .msg { text-align: center; padding: 40px; color: rgba(255,255,255,0.35); font-size: 14px; }
         .error { color: #ff6b6b; }
+
+        @media (max-width: 360px) {
+          .total-num { font-size: 36px; }
+          .item { padding: 14px; }
+          .item-icon { width: 36px; height: 36px; font-size: 16px; }
+        }
       `}</style>
     </>
   );
