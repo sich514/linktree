@@ -5,10 +5,10 @@ import os
 app = Flask(__name__)
 
 LINKS = {
-    "website": "https://yourwebsite.com",
-    "whatsapp": "https://wa.me/123456789",
-    "zagatclub": "https://t.me/yourchannel",
-    "reviews": "https://instagram.com/yourinstagram"
+    "website": "https://www.zagatboutiques.com/",
+    "whatsapp": "https://api.whatsapp.com/send/?phone=380951011135&text=https%3A%2F%2Fzagatboutique.com%2F%0D%0A%0D%0AHi!+Can+you+help%3F&type=phone_number&app_absent=0",
+    "zagatclub": "https://t.me/zagat_club",
+    "reviews": "https://www.instagram.com/stories/highlights/18104464960940633/"
 }
 
 DATA_FILE = "clicks.json"
