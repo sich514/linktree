@@ -1,0 +1,69 @@
+<!-- PREMIUM DARK GREEN BACKGROUND -->
+
+<style>
+
+body{
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+
+    background:
+    radial-gradient(circle at top left, #1d4d3d 0%, transparent 30%),
+    radial-gradient(circle at bottom right, #0c2a22 0%, transparent 35%),
+    linear-gradient(
+        135deg,
+        #04130f 0%,
+        #071d17 25%,
+        #0b2e24 55%,
+        #04130f 100%
+    );
+
+    color:white;
+}
+
+.background{
+    position:fixed;
+    inset:0;
+
+    background:
+    radial-gradient(circle at top center,
+    rgba(44, 109, 86, 0.35) 0%,
+    transparent 35%),
+
+    radial-gradient(circle at bottom right,
+    rgba(19, 64, 51, 0.45) 0%,
+    transparent 40%);
+
+    backdrop-filter:blur(40px);
+    z-index:-1;
+}
+
+.card{
+    background:rgba(8, 25, 20, 0.58);
+    border:1px solid rgba(120,255,190,0.08);
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,0.45),
+    0 0 40px rgba(39, 112, 84, 0.12);
+
+    backdrop-filter:blur(22px);
+}
+
+.link-btn{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(126,255,189,0.06);
+}
+
+.link-btn:hover{
+    background:rgba(72, 163, 124, 0.12);
+
+    box-shadow:
+    0 0 25px rgba(72,163,124,0.18);
+
+    transform:translateY(-4px);
+}
+
+.icon{
+    background:rgba(80, 182, 140, 0.12);
+}
+
+</style>
