@@ -35,7 +35,7 @@ export default function Home() {
             <div className="avatar-ring">
               <div className="avatar">
                 <img
-                  src="/pages/logo.jpg"
+                  src="/logo.jpg"
                   alt="Zagat Boutique"
                   loading="eager"
                 />
