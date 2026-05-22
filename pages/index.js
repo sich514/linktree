@@ -2,9 +2,9 @@
 import Head from "next/head";
 
 const LINKS = [
-  { key: "website",   icon: "🌐", label: "Website",    desc: "Shop the collection" },
+  { key: "website",   icon: "👜", label: "Website",    desc: "Shop the collection" },
   { key: "whatsapp",  icon: "💬", label: "WhatsApp",   desc: "Chat with us" },
-  { key: "zagatclub", icon: "🚀", label: "Zagat Club", desc: "Join our Telegram" },
+  { key: "zagatclub", icon: "🗝️", label: "Zagat Club", desc: "Join our Telegram" },
   { key: "reviews",   icon: "⭐", label: "Reviews",    desc: "See what clients say" },
 ];
 
