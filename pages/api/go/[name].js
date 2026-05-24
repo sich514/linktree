@@ -1,5 +1,5 @@
 // pages/api/go/[name].js
-import { incrementClick } from "../../../lib/kv";
+import { incrementClick, trackDaily, trackCountry } from "../../../lib/kv";
 import { LINKS } from "../../../lib/links";
 
 export default async function handler(req, res) {
@@ -10,7 +10,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    await incrementClick(name);
+    // Vercel provides geo headers automatically (free)
+    const country = req.headers["x-vercel-ip-country"] || "XX";
+    await Promise.all([
+      incrementClick(name),
+      trackDaily(name),
+      trackCountry(country),
+    ]);
   } catch (err) {
     console.error("Click tracking error:", err);
   }
