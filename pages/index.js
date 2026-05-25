@@ -40,7 +40,7 @@ export default function Home() {
             <div className="avatar-ring">
               <div className="avatar">
                 <img
-                  src="/logo.jpg"
+                  src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=400&auto=format&fit=crop"
                   alt="Zagat Boutique"
                   loading="eager"
                 />
