@@ -47,6 +47,7 @@ export default function Analytics() {
   const [loading, setLoading] = useState(true);
   const [days, setDays] = useState(14);
   const [tab, setTab] = useState("overview");
+  const [hovered, setHovered] = useState(null); // date string of hovered row
 
   const load = (numDays) => {
     setLoading(true);
@@ -149,20 +150,25 @@ export default function Analytics() {
                   {(() => {
                     const reversed = [...data.daily].reverse();
                     const maxTotal = Math.max(...reversed.map(d => d.total), 1);
-                    // Only show days that have data, plus a few recent zeros for context
                     return (
                       <div className="hchart">
                         {reversed.map((d) => (
-                          <div className="hchart-row" key={d.date}>
+                          <div
+                            className={`hchart-row ${hovered === d.date ? "hovered" : ""}`}
+                            key={d.date}
+                            onMouseEnter={() => setHovered(d.date)}
+                            onMouseLeave={() => setHovered(null)}
+                            onClick={() => setHovered(hovered === d.date ? null : d.date)}
+                          >
                             <span className="hchart-date">{fmtDate(d.date)}</span>
                             <span className="hchart-bar-wrap">
                               {d.total > 0 ? (
                                 <span className="hchart-bar" style={{ width: `${(d.total / maxTotal) * 100}%` }}>
                                   <span className="hchart-segments">
-                                    {d.website > 0 && <span className="seg seg-web" style={{ flex: d.website }} title={`Website: ${d.website}`} />}
-                                    {d.whatsapp > 0 && <span className="seg seg-wa" style={{ flex: d.whatsapp }} title={`WhatsApp: ${d.whatsapp}`} />}
-                                    {d.zagatclub > 0 && <span className="seg seg-tg" style={{ flex: d.zagatclub }} title={`Zagat Club: ${d.zagatclub}`} />}
-                                    {d.reviews > 0 && <span className="seg seg-rv" style={{ flex: d.reviews }} title={`Reviews: ${d.reviews}`} />}
+                                    {d.website > 0 && <span className="seg seg-web" style={{ flex: d.website }} />}
+                                    {d.whatsapp > 0 && <span className="seg seg-wa" style={{ flex: d.whatsapp }} />}
+                                    {d.zagatclub > 0 && <span className="seg seg-tg" style={{ flex: d.zagatclub }} />}
+                                    {d.reviews > 0 && <span className="seg seg-rv" style={{ flex: d.reviews }} />}
                                   </span>
                                 </span>
                               ) : (
@@ -170,6 +176,17 @@ export default function Analytics() {
                               )}
                             </span>
                             <span className="hchart-num">{d.total || "–"}</span>
+
+                            {/* Tooltip */}
+                            {hovered === d.date && d.total > 0 && (
+                              <div className="tooltip">
+                                <div className="tooltip-title">{fmtDate(d.date)} — {d.total} clicks</div>
+                                {d.website > 0 && <div className="tooltip-row"><span className="tooltip-dot seg-web" /> Website <span className="tooltip-val">{d.website}</span></div>}
+                                {d.whatsapp > 0 && <div className="tooltip-row"><span className="tooltip-dot seg-wa" /> WhatsApp <span className="tooltip-val">{d.whatsapp}</span></div>}
+                                {d.zagatclub > 0 && <div className="tooltip-row"><span className="tooltip-dot seg-tg" /> Telegram <span className="tooltip-val">{d.zagatclub}</span></div>}
+                                {d.reviews > 0 && <div className="tooltip-row"><span className="tooltip-dot seg-rv" /> Reviews <span className="tooltip-val">{d.reviews}</span></div>}
+                              </div>
+                            )}
                           </div>
                         ))}
                         {/* Legend */}
@@ -319,7 +336,8 @@ export default function Analytics() {
           background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
           border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 6px;
         }
-        .hchart-row { display: flex; align-items: center; gap: 10px; height: 26px; }
+        .hchart-row { display: flex; align-items: center; gap: 10px; height: 26px; position: relative; cursor: pointer; border-radius: 8px; padding: 0 4px; transition: background 0.15s; }
+        .hchart-row.hovered { background: rgba(255,255,255,0.04); }
         .hchart-date {
           width: 52px; flex-shrink: 0; font-size: 12px; color: rgba(255,255,255,0.45);
           font-family: 'DM Mono', monospace; text-align: right;
@@ -340,6 +358,22 @@ export default function Analytics() {
           width: 30px; flex-shrink: 0; text-align: right;
           font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.55);
         }
+
+        /* Tooltip */
+        .tooltip {
+          position: absolute; left: 60px; top: 100%; z-index: 10;
+          margin-top: 4px;
+          background: rgba(15,30,22,0.95); border: 1px solid rgba(88,189,148,0.25);
+          border-radius: 10px; padding: 10px 14px;
+          min-width: 170px; pointer-events: none;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+          animation: tooltipIn 0.15s ease;
+        }
+        @keyframes tooltipIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+        .tooltip-title { font-size: 12px; font-weight: 600; color: #fff; margin-bottom: 6px; white-space: nowrap; }
+        .tooltip-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.7); padding: 2px 0; }
+        .tooltip-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+        .tooltip-val { margin-left: auto; font-family: 'DM Mono', monospace; font-weight: 500; color: #fff; }
 
         .hchart-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); }
         .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: rgba(255,255,255,0.4); }
