@@ -31,6 +31,7 @@ export default function Home() {
       </Head>
 
       <div className="page">
+        <div className="bags-bg" />
         <div className="glow glow-1" />
         <div className="glow glow-2" />
 
@@ -116,6 +117,16 @@ export default function Home() {
           padding: 24px 16px env(safe-area-inset-bottom, 0px);
         }
 
+        /* Bags background */
+        .bags-bg {
+          position: fixed;
+          inset: 0;
+          background: url('/bags.png') center center / cover no-repeat;
+          opacity: 0.55;
+          z-index: 0;
+          pointer-events: none;
+        }
+
         /* Background glows */
         .glow {
           position: fixed;
@@ -141,7 +152,7 @@ export default function Home() {
           z-index: 1;
           width: 100%;
           max-width: 420px;
-          background: rgba(255,255,255,0.04);
+          background: rgba(6,15,11,0.82);
           border: 1px solid rgba(255,255,255,0.07);
           backdrop-filter: blur(24px);
           -webkit-backdrop-filter: blur(24px);
