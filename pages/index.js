@@ -317,37 +317,50 @@ export default function Home() {
         .link-featured {
           position: relative;
           padding: 20px 16px;
-          background: rgba(255,255,255,0.05);
+          background: transparent;
           border: 1px solid transparent;
-          overflow: hidden;
+        }
+
+        .link-featured .link-icon,
+        .link-featured .link-text,
+        .link-featured .link-arrow {
+          position: relative;
+          z-index: 1;
         }
 
         .gold-border {
           position: absolute;
-          inset: -1px;
-          border-radius: 17px;
-          padding: 1.5px;
-          background: linear-gradient(
-            90deg,
-            rgba(180,140,60,0.15),
-            rgba(218,185,100,0.6),
-            rgba(255,215,100,0.8),
-            rgba(218,185,100,0.6),
-            rgba(180,140,60,0.15)
-          );
-          background-size: 300% 100%;
-          animation: goldShimmer 3s ease-in-out infinite;
-          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          mask-composite: exclude;
+          inset: 0;
+          border-radius: 16px;
+          border: 1.5px solid transparent;
           pointer-events: none;
+          z-index: 0;
+          background:
+            linear-gradient(rgba(6,15,11,0.82), rgba(6,15,11,0.82)) padding-box,
+            conic-gradient(
+              from var(--gold-angle, 0deg),
+              transparent 0deg,
+              transparent 30deg,
+              rgba(180,140,60,0.3) 60deg,
+              rgba(218,185,100,0.75) 85deg,
+              rgba(255,220,100,1) 100deg,
+              rgba(218,185,100,0.75) 115deg,
+              rgba(180,140,60,0.3) 140deg,
+              transparent 170deg,
+              transparent 360deg
+            ) border-box;
+          animation: goldSpin 4s linear infinite;
         }
 
-        @keyframes goldShimmer {
-          0%   { background-position: 100% 0; }
-          50%  { background-position: 0% 0; }
-          100% { background-position: 100% 0; }
+        @property --gold-angle {
+          syntax: '<angle>';
+          initial-value: 0deg;
+          inherits: false;
+        }
+
+        @keyframes goldSpin {
+          from { --gold-angle: 0deg; }
+          to   { --gold-angle: 360deg; }
         }
 
         .link-featured:hover, .link-featured:focus-visible {
