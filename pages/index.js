@@ -87,6 +87,7 @@ export default function Home() {
               rel="noopener noreferrer"
               style={{ animationDelay: "0.24s" }}
             >
+              <div className="gold-border"><span className="gold-spin" /><span className="gold-mask" /></div>
               <span className="link-icon featured-icon">⭐</span>
               <span className="link-text">
                 <span className="link-label featured-label">{CHANNEL.label}</span>
@@ -317,55 +318,61 @@ export default function Home() {
           position: relative;
           padding: 20px 16px;
           background: rgba(255,255,255,0.05);
-          border: 1px solid rgba(200,170,80,0.3);
-          box-shadow:
-            0 0 8px rgba(218,185,100,0.08),
-            inset 0 0 8px rgba(218,185,100,0.03);
-          animation: linkIn 0.4s ease-out both, goldGlow 3s ease-in-out infinite;
-          background-image: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(218,185,100,0.12) 25%,
-            rgba(255,220,100,0.18) 50%,
-            rgba(218,185,100,0.12) 75%,
-            transparent 100%
-          );
-          background-size: 200% 100%;
-          background-repeat: no-repeat;
-          background-origin: border-box;
+          border: 1px solid rgba(200,170,80,0.15);
         }
 
-        @keyframes goldGlow {
-          0% {
-            border-color: rgba(200,170,80,0.25);
-            box-shadow:
-              0 0 6px rgba(218,185,100,0.06),
-              inset 0 0 6px rgba(218,185,100,0.02);
-            background-position: 200% 0;
-          }
-          50% {
-            border-color: rgba(218,185,100,0.55);
-            box-shadow:
-              0 0 14px rgba(218,185,100,0.15),
-              0 0 30px rgba(218,185,100,0.06),
-              inset 0 0 10px rgba(218,185,100,0.04);
-            background-position: -200% 0;
-          }
-          100% {
-            border-color: rgba(200,170,80,0.25);
-            box-shadow:
-              0 0 6px rgba(218,185,100,0.06),
-              inset 0 0 6px rgba(218,185,100,0.02);
-            background-position: 200% 0;
-          }
+        .link-featured .link-icon,
+        .link-featured .link-text,
+        .link-featured .link-arrow {
+          position: relative;
+          z-index: 1;
+        }
+
+        .gold-border {
+          position: absolute;
+          inset: -1px;
+          border-radius: 17px;
+          overflow: hidden;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .gold-spin {
+          position: absolute;
+          inset: -80%;
+          display: block;
+          background: conic-gradient(
+            from 0deg,
+            rgba(200,170,80,0.12) 0deg,
+            transparent 60deg,
+            transparent 150deg,
+            rgba(180,150,70,0.2) 165deg,
+            rgba(218,185,100,0.45) 175deg,
+            rgba(255,225,120,0.6) 180deg,
+            rgba(218,185,100,0.45) 185deg,
+            rgba(180,150,70,0.2) 195deg,
+            transparent 210deg,
+            transparent 300deg,
+            rgba(200,170,80,0.12) 360deg
+          );
+          animation: goldSpin 5s linear infinite;
+        }
+
+        .gold-mask {
+          position: absolute;
+          inset: 1.5px;
+          display: block;
+          border-radius: 15.5px;
+          background: #0b1710;
+        }
+
+        @keyframes goldSpin {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
         }
 
         .link-featured:hover, .link-featured:focus-visible {
-          background-color: rgba(218,185,100,0.08);
-          border-color: rgba(218,185,100,0.6);
-          box-shadow:
-            0 0 16px rgba(218,185,100,0.2),
-            0 0 36px rgba(218,185,100,0.08);
+          border-color: rgba(218,185,100,0.35);
         }
         .link-featured:hover .link-arrow {
           color: #dab964;
