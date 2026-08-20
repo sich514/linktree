@@ -87,7 +87,7 @@ export default function Home() {
               rel="noopener noreferrer"
               style={{ animationDelay: "0.24s" }}
             >
-              <div className="gold-border" />
+              <div className="gold-border"><span className="gold-spin" /><span className="gold-mask" /></div>
               <span className="link-icon featured-icon">⭐</span>
               <span className="link-text">
                 <span className="link-label featured-label">{CHANNEL.label}</span>
@@ -332,35 +332,41 @@ export default function Home() {
           position: absolute;
           inset: 0;
           border-radius: 16px;
-          border: 1.5px solid transparent;
+          overflow: hidden;
           pointer-events: none;
           z-index: 0;
-          background:
-            linear-gradient(rgba(6,15,11,0.82), rgba(6,15,11,0.82)) padding-box,
-            conic-gradient(
-              from var(--gold-angle, 0deg),
-              transparent 0deg,
-              transparent 30deg,
-              rgba(180,140,60,0.3) 60deg,
-              rgba(218,185,100,0.75) 85deg,
-              rgba(255,220,100,1) 100deg,
-              rgba(218,185,100,0.75) 115deg,
-              rgba(180,140,60,0.3) 140deg,
-              transparent 170deg,
-              transparent 360deg
-            ) border-box;
+        }
+
+        .gold-spin {
+          position: absolute;
+          inset: -50%;
+          display: block;
+          background: conic-gradient(
+            from 0deg,
+            transparent 0deg,
+            transparent 30deg,
+            rgba(180,140,60,0.3) 60deg,
+            rgba(218,185,100,0.75) 85deg,
+            rgba(255,220,100,1) 100deg,
+            rgba(218,185,100,0.75) 115deg,
+            rgba(180,140,60,0.3) 140deg,
+            transparent 170deg,
+            transparent 360deg
+          );
           animation: goldSpin 4s linear infinite;
         }
 
-        @property --gold-angle {
-          syntax: '<angle>';
-          initial-value: 0deg;
-          inherits: false;
+        .gold-mask {
+          position: absolute;
+          inset: 1.5px;
+          display: block;
+          border-radius: 14.5px;
+          background: rgba(6,15,11,0.82);
         }
 
         @keyframes goldSpin {
-          from { --gold-angle: 0deg; }
-          to   { --gold-angle: 360deg; }
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
         }
 
         .link-featured:hover, .link-featured:focus-visible {
