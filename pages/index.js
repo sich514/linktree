@@ -3,11 +3,15 @@ import Head from "next/head";
 import { useEffect } from "react";
 
 const LINKS = [
-  { key: "website",   icon: "🌐", label: "Website",    desc: "Shop the collection" },
-  { key: "whatsapp",  icon: "💬", label: "WhatsApp",   desc: "Chat with us" },
-  { key: "zagatclub", icon: "🚀", label: "Zagat Club", desc: "Join our Telegram" },
-  { key: "reviews",   icon: "⭐", label: "Reviews",    desc: "See what clients say" },
+  { key: "website",  icon: "🌐", label: "Website",  desc: "Shop the collection" },
+  { key: "whatsapp", icon: "💬", label: "Have questions?", desc: "Message us on WhatsApp" },
 ];
+
+const CHANNEL = {
+  key: "reviews",
+  label: "WhatsApp Channel",
+  desc: "Exclusive videos of finished bags, real client reviews & special gifts only for subscribers",
+};
 
 export default function Home() {
   useEffect(() => {
@@ -74,6 +78,27 @@ export default function Home() {
                 </span>
               </a>
             ))}
+
+            {/* Featured channel button */}
+            <a
+              className="link link-featured"
+              href={`/api/go/${CHANNEL.key}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ animationDelay: "0.24s" }}
+            >
+              <div className="gold-border" />
+              <span className="link-icon featured-icon">⭐</span>
+              <span className="link-text">
+                <span className="link-label featured-label">{CHANNEL.label}</span>
+                <span className="link-desc featured-desc">{CHANNEL.desc}</span>
+              </span>
+              <span className="link-arrow">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                </svg>
+              </span>
+            </a>
           </nav>
 
           {/* Footer */}
@@ -288,6 +313,71 @@ export default function Home() {
           transform: translate(2px, -2px);
         }
 
+        /* ===== Featured channel button ===== */
+        .link-featured {
+          position: relative;
+          padding: 20px 16px;
+          background: rgba(255,255,255,0.05);
+          border: 1px solid transparent;
+          overflow: hidden;
+        }
+
+        .gold-border {
+          position: absolute;
+          inset: -1px;
+          border-radius: 17px;
+          padding: 1.5px;
+          background: linear-gradient(
+            90deg,
+            rgba(180,140,60,0.15),
+            rgba(218,185,100,0.6),
+            rgba(255,215,100,0.8),
+            rgba(218,185,100,0.6),
+            rgba(180,140,60,0.15)
+          );
+          background-size: 300% 100%;
+          animation: goldShimmer 3s ease-in-out infinite;
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          mask-composite: exclude;
+          pointer-events: none;
+        }
+
+        @keyframes goldShimmer {
+          0%   { background-position: 100% 0; }
+          50%  { background-position: 0% 0; }
+          100% { background-position: 100% 0; }
+        }
+
+        .link-featured:hover, .link-featured:focus-visible {
+          background: rgba(218,185,100,0.08);
+        }
+        .link-featured:hover .link-arrow {
+          color: #dab964;
+        }
+
+        .featured-icon {
+          width: 48px; height: 48px;
+          font-size: 22px;
+          background: rgba(218,185,100,0.1);
+          border-radius: 14px;
+        }
+
+        .featured-label {
+          font-size: 16px;
+          font-weight: 600;
+          color: #fff;
+        }
+
+        .featured-desc {
+          font-size: 12px;
+          line-height: 1.45;
+          color: rgba(255,255,255,0.45);
+          margin-top: 4px;
+          white-space: normal;
+        }
+
         /* Footer */
         .footer {
           margin-top: 24px;
@@ -308,6 +398,8 @@ export default function Home() {
           .link-icon { width: 38px; height: 38px; font-size: 16px; border-radius: 10px; }
           .link-label { font-size: 14px; }
           .link-desc { font-size: 11px; }
+          .link-featured { padding: 16px 14px; }
+          .featured-icon { width: 42px; height: 42px; }
         }
 
         /* Tablets */
@@ -315,6 +407,7 @@ export default function Home() {
           .card { max-width: 440px; padding: 44px 32px 34px; }
           h1 { font-size: 30px; }
           .link { padding: 16px 20px; }
+          .link-featured { padding: 22px 20px; }
         }
 
         /* Desktop */
@@ -331,11 +424,12 @@ export default function Home() {
           .links { gap: 8px; }
           .link { padding: 10px 14px; }
           .link-icon { width: 36px; height: 36px; }
+          .link-featured { padding: 14px; }
         }
 
         /* Respect prefers-reduced-motion */
         @media (prefers-reduced-motion: reduce) {
-          .card, .link, .avatar-ring { animation: none; }
+          .card, .link, .avatar-ring, .gold-border { animation: none; }
           .link:hover { transform: none; }
         }
       `}</style>

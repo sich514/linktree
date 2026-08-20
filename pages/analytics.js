@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 const LINK_LABELS = {
   website:   { icon: "🌐", label: "Website" },
   whatsapp:  { icon: "💬", label: "WhatsApp" },
-  zagatclub: { icon: "🚀", label: "Zagat Club" },
-  reviews:   { icon: "⭐", label: "Reviews" },
+  reviews:   { icon: "⭐", label: "WA Channel" },
 };
 
 function flag(code) {
@@ -167,7 +166,7 @@ export default function Analytics() {
                                   <span className="hchart-segments">
                                     {d.website > 0 && <span className="seg seg-web" style={{ flex: d.website }} />}
                                     {d.whatsapp > 0 && <span className="seg seg-wa" style={{ flex: d.whatsapp }} />}
-                                    {d.zagatclub > 0 && <span className="seg seg-tg" style={{ flex: d.zagatclub }} />}
+
                                     {d.reviews > 0 && <span className="seg seg-rv" style={{ flex: d.reviews }} />}
                                   </span>
                                 </span>
@@ -183,7 +182,7 @@ export default function Analytics() {
                                 <div className="tooltip-title">{fmtDate(d.date)} — {d.total} clicks</div>
                                 {d.website > 0 && <div className="tooltip-row"><span className="tooltip-dot seg-web" /> Website <span className="tooltip-val">{d.website}</span></div>}
                                 {d.whatsapp > 0 && <div className="tooltip-row"><span className="tooltip-dot seg-wa" /> WhatsApp <span className="tooltip-val">{d.whatsapp}</span></div>}
-                                {d.zagatclub > 0 && <div className="tooltip-row"><span className="tooltip-dot seg-tg" /> Telegram <span className="tooltip-val">{d.zagatclub}</span></div>}
+
                                 {d.reviews > 0 && <div className="tooltip-row"><span className="tooltip-dot seg-rv" /> Reviews <span className="tooltip-val">{d.reviews}</span></div>}
                               </div>
                             )}
@@ -193,7 +192,7 @@ export default function Analytics() {
                         <div className="hchart-legend">
                           <span className="legend-item"><span className="legend-dot seg-web" /> Website</span>
                           <span className="legend-item"><span className="legend-dot seg-wa" /> WhatsApp</span>
-                          <span className="legend-item"><span className="legend-dot seg-tg" /> Telegram</span>
+
                           <span className="legend-item"><span className="legend-dot seg-rv" /> Reviews</span>
                         </div>
                       </div>
