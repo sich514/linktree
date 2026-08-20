@@ -87,7 +87,6 @@ export default function Home() {
               rel="noopener noreferrer"
               style={{ animationDelay: "0.24s" }}
             >
-              <div className="gold-border"><span className="gold-spin" /><span className="gold-mask" /></div>
               <span className="link-icon featured-icon">⭐</span>
               <span className="link-text">
                 <span className="link-label featured-label">{CHANNEL.label}</span>
@@ -317,60 +316,56 @@ export default function Home() {
         .link-featured {
           position: relative;
           padding: 20px 16px;
-          background: transparent;
-          border: 1px solid transparent;
-        }
-
-        .link-featured .link-icon,
-        .link-featured .link-text,
-        .link-featured .link-arrow {
-          position: relative;
-          z-index: 1;
-        }
-
-        .gold-border {
-          position: absolute;
-          inset: 0;
-          border-radius: 16px;
-          overflow: hidden;
-          pointer-events: none;
-          z-index: 0;
-        }
-
-        .gold-spin {
-          position: absolute;
-          inset: -50%;
-          display: block;
-          background: conic-gradient(
-            from 0deg,
-            transparent 0deg,
-            transparent 30deg,
-            rgba(180,140,60,0.3) 60deg,
-            rgba(218,185,100,0.75) 85deg,
-            rgba(255,220,100,1) 100deg,
-            rgba(218,185,100,0.75) 115deg,
-            rgba(180,140,60,0.3) 140deg,
-            transparent 170deg,
-            transparent 360deg
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(200,170,80,0.3);
+          box-shadow:
+            0 0 8px rgba(218,185,100,0.08),
+            inset 0 0 8px rgba(218,185,100,0.03);
+          animation: linkIn 0.4s ease-out both, goldGlow 3s ease-in-out infinite;
+          background-image: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(218,185,100,0.12) 25%,
+            rgba(255,220,100,0.18) 50%,
+            rgba(218,185,100,0.12) 75%,
+            transparent 100%
           );
-          animation: goldSpin 4s linear infinite;
+          background-size: 200% 100%;
+          background-repeat: no-repeat;
+          background-origin: border-box;
         }
 
-        .gold-mask {
-          position: absolute;
-          inset: 1.5px;
-          display: block;
-          border-radius: 14.5px;
-          background: rgba(6,15,11,0.82);
-        }
-
-        @keyframes goldSpin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
+        @keyframes goldGlow {
+          0% {
+            border-color: rgba(200,170,80,0.25);
+            box-shadow:
+              0 0 6px rgba(218,185,100,0.06),
+              inset 0 0 6px rgba(218,185,100,0.02);
+            background-position: 200% 0;
+          }
+          50% {
+            border-color: rgba(218,185,100,0.55);
+            box-shadow:
+              0 0 14px rgba(218,185,100,0.15),
+              0 0 30px rgba(218,185,100,0.06),
+              inset 0 0 10px rgba(218,185,100,0.04);
+            background-position: -200% 0;
+          }
+          100% {
+            border-color: rgba(200,170,80,0.25);
+            box-shadow:
+              0 0 6px rgba(218,185,100,0.06),
+              inset 0 0 6px rgba(218,185,100,0.02);
+            background-position: 200% 0;
+          }
         }
 
         .link-featured:hover, .link-featured:focus-visible {
-          background: rgba(218,185,100,0.08);
+          background-color: rgba(218,185,100,0.08);
+          border-color: rgba(218,185,100,0.6);
+          box-shadow:
+            0 0 16px rgba(218,185,100,0.2),
+            0 0 36px rgba(218,185,100,0.08);
         }
         .link-featured:hover .link-arrow {
           color: #dab964;
