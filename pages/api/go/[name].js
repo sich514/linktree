@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     const country = req.headers["x-vercel-ip-country"] || "XX";
     await Promise.all([
       incrementClick(name),
-      trackDaily(name),
+      trackDaily(name, country),
       trackCountry(country),
     ]);
   } catch (err) {
